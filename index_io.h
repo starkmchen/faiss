@@ -13,6 +13,7 @@
 #define FAISS_INDEX_IO_H
 
 
+#include "MetaIndexes.h"
 #include <cstdio>
 
 /** I/O functions can read/write to a filename, a file handle or to an
@@ -49,6 +50,7 @@ const int IO_FLAG_READ_ONLY = 2;
 // the same directory as the index file
 const int IO_FLAG_ONDISK_SAME_DIR = 4;
 
+int32_t ReadIndex(const char *fname, IndexIDMap &idxmap, int io_flags = 0);
 Index *read_index (const char *fname, int io_flags = 0);
 Index *read_index (FILE * f, int io_flags = 0);
 Index *read_index (IOReader *reader, int io_flags = 0);

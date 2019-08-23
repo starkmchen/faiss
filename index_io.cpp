@@ -899,6 +899,27 @@ static IndexIVFPQ *read_ivfpq (IOReader *f, uint32_t h, int io_flags)
 
 int read_old_fmt_hack = 0;
 
+int32_t ReadIndex(const char *fname, IndexIDMap &idxmap, int io_flags) {
+    FileIOReader reader(fname);
+    IOReader *f =  &reader;
+    uint32_t h;
+    READ1 (h);
+    if (h != fourcc ("IxMp")) {
+      return -1;
+    }
+    read_index_header(&idxmap, f);
+    READ1 (h);
+    if (h != fourcc ("IxFI")) {
+      return -2;
+    }
+    IndexFlat *idxf = static_cast<IndexFlat *> (idxmap.index);
+    read_index_header (idxf, f);
+    READVECTOR (idxf->xb);
+    FAISS_THROW_IF_NOT (idxf->xb.size() == idxf->ntotal * idxf->d);
+    READVECTOR (idxmap.id_map);
+    return 0;
+}
+
 Index *read_index (IOReader *f, int io_flags) {
     Index * idx = nullptr;
     uint32_t h;
