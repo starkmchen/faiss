@@ -899,8 +899,8 @@ static IndexIVFPQ *read_ivfpq (IOReader *f, uint32_t h, int io_flags)
 
 int read_old_fmt_hack = 0;
 
-int32_t ReadIndex(const char *fname, IndexIDMap &idxmap, int io_flags) {
-    FileIOReader reader(fname);
+int32_t ReadIndex(FILE *fp, IndexIDMap &idxmap, int io_flags) {
+    FileIOReader reader(fp);
     IOReader *f =  &reader;
     uint32_t h;
     READ1 (h);
